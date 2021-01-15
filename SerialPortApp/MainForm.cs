@@ -34,7 +34,7 @@ namespace SerialPortApp
 
         #region Fields
 
-        SerialPortManager _spManager;     /** Custom serial port manager class object.              */
+        SerialPortManager _spManager; /** Custom serial port manager class object. */
 
         #endregion
 
