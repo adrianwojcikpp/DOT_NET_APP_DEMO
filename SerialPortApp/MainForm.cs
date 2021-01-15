@@ -14,6 +14,7 @@ using System.Text;
 using System.Windows.Forms;
 using SerialPortApp.Serial;
 using System.Globalization;
+using System.Diagnostics;
 
 namespace SerialPortApp
 {
@@ -33,10 +34,7 @@ namespace SerialPortApp
 
         #region Fields
 
-        SerialPortManager _spManager;   /** Custom serial port manager class object */
-        UInt16 _dacValue = 0x0000;      /** Analog output 12 bit register value */
-        double _plot_time_step = 0.1;   /** Analog input sample time in seconds */
-        double _plot_time = 0.0;        /** Analog input plot time variable */
+        SerialPortManager _spManager;     /** Custom serial port manager class object.              */
 
         #endregion
 
@@ -90,7 +88,6 @@ namespace SerialPortApp
                 this.BeginInvoke(new EventHandler<EventArgs>(_spManager_ErrorHandler), new object[] { sender, e });
                 return;
             }
-
             error_label.Text = ((Exception)sender).Message;
         }
 
@@ -134,13 +131,26 @@ namespace SerialPortApp
             tbDataReceive.Clear();
         }
 
+        /*
+         * Receive text box 'Rx Enable' check box click event method.
+         * @param sender - contains a reference to the control/object that raised the event.
+         * @param e - contains the event data.
+         */
+        private void rxEnableCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rxEnableCheckBox.Checked)
+                RxTextBoxEnable();
+            else
+                RxTextBoxDisable();
+        }
+
         #endregion
 
         #region Methods
 
         /*
          * User custom initialization.
-         */ 
+         */
         private void UserInitialization()
         {
             // New serial port manager
@@ -168,8 +178,8 @@ namespace SerialPortApp
         }
 
         /*
-        * Connect procedure - open and start listening on COM port
-        */ 
+        * Connect procedure - open and start listening on COM port.
+        */
         private void Connect()
         {
             if (_spManager.StartListening())
@@ -185,7 +195,7 @@ namespace SerialPortApp
         }
 
         /*
-        * Disconnect procedure - close and stop listening on COM port
+        * Disconnect procedure - close and stop listening on COM port.
         */
         private void Disonnect()
         {
@@ -198,39 +208,25 @@ namespace SerialPortApp
             parityComboBox.Enabled = true;
             stopBitsComboBox.Enabled = true;
         }
-
+   
         /*
-         * @TODO 
+         * Enables receive text box.
          */
-        private void rxTextBoxEnable()
+        private void RxTextBoxEnable()
         {
             rxEnableCheckBox.Checked = true;
             tbDataReceive.Enabled = true;
             _spManager.NewSerialDataRecieved += new EventHandler<SerialDataEventArgs>(_spManager_NewSerialDataRecieved);
         }
 
-
         /*
-         * @TODO 
+         * Disables receive text box.
          */
-        private void rxTextBoxDisable()
+        private void RxTextBoxDisable()
         {
             rxEnableCheckBox.Checked = false;
             tbDataReceive.Enabled = false;
             _spManager.NewSerialDataRecieved -= new EventHandler<SerialDataEventArgs>(_spManager_NewSerialDataRecieved);
-        }
-
-        /*
-         * @TODO 
-         * @param sender - contains a reference to the control/object that raised the event.
-         * @param e - contains the event data.
-         */
-        private void rxEnableCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rxEnableCheckBox.Checked)
-                rxTextBoxEnable();
-            else
-                rxTextBoxDisable();
         }
 
         #endregion
