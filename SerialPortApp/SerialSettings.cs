@@ -32,8 +32,8 @@ namespace SerialPortApp.Serial
         StopBits _stopBits = StopBits.One;  /**< Serial port stop bits number. */
 
         string[] _portNameCollection;                                   /**< Serial port name collection. */
-        BindingList<int> _baudRateCollection = new BindingList<int>();  /**< Serial port setable baud rate collection */
-        int[] _dataBitsCollection = new int[] { 5, 6, 7, 8 };           /**< Serial port data bits collection. */
+        readonly int[] _dataBitsCollection = new int[] { 5, 6, 7, 8 };           /**< Serial port data bits collection. */
+        readonly BindingList<int> _baudRateCollection = new BindingList<int>();  /**< Serial port setable baud rate collection */
 
         public event PropertyChangedEventHandler PropertyChanged;       /**< Property changed handling evnet. */
 
@@ -143,8 +143,7 @@ namespace SerialPortApp.Serial
         */
         public int[] DataBitsCollection
         {
-            get { return _dataBitsCollection; }
-            set { _dataBitsCollection = value; }
+            get { return _dataBitsCollection; } 
         }
 
         #endregion
@@ -224,8 +223,7 @@ namespace SerialPortApp.Serial
         */
         private void SendPropertyChangedEvent(String propertyName)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion

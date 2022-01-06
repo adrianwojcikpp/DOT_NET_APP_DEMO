@@ -33,7 +33,7 @@ namespace SerialPortApp.Serial
         {
             // Finding installed serial ports on hardware
             _currentSerialSettings.PortNameCollection = SerialPort.GetPortNames();
-            _currentSerialSettings.PropertyChanged += new PropertyChangedEventHandler(_currentSerialSettings_PropertyChanged);
+            _currentSerialSettings.PropertyChanged += new PropertyChangedEventHandler(CurrentSerialSettings_PropertyChanged);
 
             // If serial ports is found, we select the first found
             #if SELECT_FIRST_FOUND
@@ -53,7 +53,6 @@ namespace SerialPortApp.Serial
 
         private SerialPort _serialPort;                                       /**< System serial port class object. */
         private SerialSettings _currentSerialSettings = new SerialSettings(); /**< Custom serial port settings class object. */
-        private string _latestRecieved = String.Empty;                        /**< Recieved data string container. */
 
         public event EventHandler<SerialDataEventArgs> NewSerialDataRecieved; /**< New data recieving routine event handler. */
         public event EventHandler<EventArgs> ErrorHandler;                    /**< Exception handling event. */
@@ -80,7 +79,7 @@ namespace SerialPortApp.Serial
          * @param sender - contains a reference to the control/object that raised the event.
          * @param e - contains the event data.
          */
-        void _currentSerialSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void CurrentSerialSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // if serial port is changed, a new baud query is issued
             if (e.PropertyName.Equals("PortName"))
@@ -92,7 +91,7 @@ namespace SerialPortApp.Serial
         * @param sender - contains a reference to the control/object that raised the event.
         * @param e - contains the event data.
         */
-        void _serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             int dataLength = 0;
 
@@ -113,10 +112,9 @@ namespace SerialPortApp.Serial
 
             if (nbrDataRead == 0)
                 return;
-            
+
             // Send data to whom ever interested
-            if (NewSerialDataRecieved != null)
-                NewSerialDataRecieved(this, new SerialDataEventArgs(data));
+            NewSerialDataRecieved?.Invoke(this, new SerialDataEventArgs(data));
         }
 
         #endregion
@@ -143,7 +141,7 @@ namespace SerialPortApp.Serial
                 _currentSerialSettings.StopBits);
 
             // Subscribe to event and open serial port for data
-            _serialPort.DataReceived += new SerialDataReceivedEventHandler(_serialPort_DataReceived);
+            _serialPort.DataReceived += new SerialDataReceivedEventHandler(SerialPort_DataReceived);
 
             // Try to open selected serial port
             try
@@ -213,7 +211,7 @@ namespace SerialPortApp.Serial
             {
                 if (_serialPort != null)
                 {
-                    _serialPort.DataReceived -= new SerialDataReceivedEventHandler(_serialPort_DataReceived);
+                    _serialPort.DataReceived -= new SerialDataReceivedEventHandler(SerialPort_DataReceived);
                 }
             }
             // Releasing serial port (and other unmanaged objects)

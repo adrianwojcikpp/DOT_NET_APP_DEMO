@@ -51,6 +51,7 @@
             this.btnSend = new System.Windows.Forms.Button();
             this.tbDataTransmit = new System.Windows.Forms.TextBox();
             this.groupBox_exceptions = new System.Windows.Forms.GroupBox();
+            this.btnClearError = new System.Windows.Forms.Button();
             this.error_label = new System.Windows.Forms.Label();
             this.tabMain = new System.Windows.Forms.TabControl();
             this.tabSerialPort = new System.Windows.Forms.TabPage();
@@ -198,7 +199,7 @@
             this.btnStop.TabIndex = 12;
             this.btnStop.Text = "Disconnect";
             this.btnStop.UseVisualStyleBackColor = true;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            this.btnStop.Click += new System.EventHandler(this.BtnStop_Click);
             // 
             // btnStart
             // 
@@ -209,7 +210,7 @@
             this.btnStart.TabIndex = 12;
             this.btnStart.Text = "Connect";
             this.btnStart.UseVisualStyleBackColor = true;
-            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            this.btnStart.Click += new System.EventHandler(this.BtnStart_Click);
             // 
             // tbDataReceive
             // 
@@ -249,7 +250,7 @@
             this.rxEnableCheckBox.TabIndex = 15;
             this.rxEnableCheckBox.Text = "Rx Enable";
             this.rxEnableCheckBox.UseVisualStyleBackColor = true;
-            this.rxEnableCheckBox.CheckedChanged += new System.EventHandler(this.rxEnableCheckBox_CheckedChanged);
+            this.rxEnableCheckBox.CheckedChanged += new System.EventHandler(this.RxEnableCheckBox_CheckedChanged);
             // 
             // btnClear
             // 
@@ -260,7 +261,7 @@
             this.btnClear.TabIndex = 14;
             this.btnClear.Text = "Clear";
             this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            this.btnClear.Click += new System.EventHandler(this.BtnClear_Click);
             // 
             // groupBox_transmit
             // 
@@ -287,7 +288,7 @@
             this.btnSend.TabIndex = 1;
             this.btnSend.Text = "Send";
             this.btnSend.UseVisualStyleBackColor = true;
-            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
+            this.btnSend.Click += new System.EventHandler(this.BtnSend_Click);
             // 
             // tbDataTransmit
             // 
@@ -302,6 +303,7 @@
             this.groupBox_exceptions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox_exceptions.Controls.Add(this.btnClearError);
             this.groupBox_exceptions.Controls.Add(this.error_label);
             this.groupBox_exceptions.Location = new System.Drawing.Point(344, 7);
             this.groupBox_exceptions.Margin = new System.Windows.Forms.Padding(4);
@@ -312,17 +314,26 @@
             this.groupBox_exceptions.TabStop = false;
             this.groupBox_exceptions.Text = "Exceptions";
             // 
+            // btnClearError
+            // 
+            this.btnClearError.Location = new System.Drawing.Point(228, 202);
+            this.btnClearError.Margin = new System.Windows.Forms.Padding(4);
+            this.btnClearError.Name = "btnClearError";
+            this.btnClearError.Size = new System.Drawing.Size(99, 28);
+            this.btnClearError.TabIndex = 13;
+            this.btnClearError.Text = "Clear error";
+            this.btnClearError.UseVisualStyleBackColor = true;
+            this.btnClearError.Click += new System.EventHandler(this.BtnClearError_Click);
+            // 
             // error_label
             // 
-            this.error_label.Dock = System.Windows.Forms.DockStyle.Fill;
             this.error_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.error_label.ForeColor = System.Drawing.Color.Red;
-            this.error_label.Location = new System.Drawing.Point(4, 19);
+            this.error_label.Location = new System.Drawing.Point(23, 36);
             this.error_label.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.error_label.Name = "error_label";
-            this.error_label.Size = new System.Drawing.Size(340, 223);
+            this.error_label.Size = new System.Drawing.Size(304, 153);
             this.error_label.TabIndex = 0;
-            this.error_label.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabMain
             // 
@@ -427,6 +438,7 @@
         private System.Windows.Forms.TabPage tabInput;
         private System.Windows.Forms.TabPage tabControl;
         private System.Windows.Forms.CheckBox rxEnableCheckBox;
+        private System.Windows.Forms.Button btnClearError;
     }
 }
 

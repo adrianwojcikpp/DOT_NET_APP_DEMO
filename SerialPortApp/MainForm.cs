@@ -18,11 +18,11 @@ using System.Diagnostics;
 
 namespace SerialPortApp
 {
-    /*
-    * Main form class. Inherit from form Form class.
-    * Partial definition -  remider of the class defined in 
-    * automatically generated file MainForm.designer.cs
-    */
+    /**
+     * @breif Main form class. Inherit from form Form class.
+     *        Partial definition -  remider of the class defined in 
+     *        automatically generated file MainForm.designer.cs
+     */
     public partial class MainForm : Form
     {
         //! Default constructor.
@@ -40,27 +40,27 @@ namespace SerialPortApp
 
         #region Event handlers
 
-        /*
-         * Main form window closing event handling function.
-         * @param sender - contains a reference to the control/object that raised the event.
-         * @param e - contains the form closing event data.
+        /**
+         * @brief Main form window closing event handling function.
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the form closing event data.
          */
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             _spManager.Dispose();
         }
 
-        /*
-        * New serial port data recived event handlig function. Update of "tbDataReceive" text box.
-        * @param sender - contains a reference to the control/object that raised the event.
-        * @param e - contains the serial port event data.
-        */
-        void _spManager_NewSerialDataRecieved(object sender, SerialDataEventArgs e)
+        /**
+         * @brief New serial port data recived event handlig function. Update of "tbDataReceive" text box.
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the serial port event data.
+         */
+        private void SpManager_DataReveiced_UpdateTextblock(object sender, SerialDataEventArgs e)
         {
-            if (this.InvokeRequired)
+            if (InvokeRequired)
             {
                 // Using this.Invoke causes deadlock when closing serial port, and BeginInvoke is good practice anyway.
-                this.BeginInvoke(new EventHandler<SerialDataEventArgs>(_spManager_NewSerialDataRecieved), new object[] { sender, e });
+                BeginInvoke(new EventHandler<SerialDataEventArgs>(SpManager_DataReveiced_UpdateTextblock), new object[] { sender, e });
                 return;
             }
 
@@ -75,68 +75,78 @@ namespace SerialPortApp
             tbDataReceive.ScrollToCaret();
         }
 
-        /*
-        * Error handling function. Display message in groupBox "Exceptions".
-        * @param sender - contains a reference to the control/object that raised the event.
-        * @param e - contains the event data.
-        */
-        private void _spManager_ErrorHandler(object sender, EventArgs e)
+        /**
+         * @brief Error handling function. Display message in groupBox "Exceptions".
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the event data.
+         */
+        private void SpManager_ErrorHandler(object sender, EventArgs e)
         {
             if (this.InvokeRequired)
             {
                 // Using this.Invoke causes deadlock when closing serial port, and BeginInvoke is good practice anyway.
-                this.BeginInvoke(new EventHandler<EventArgs>(_spManager_ErrorHandler), new object[] { sender, e });
+                this.BeginInvoke(new EventHandler<EventArgs>(SpManager_ErrorHandler), new object[] { sender, e });
                 return;
             }
             error_label.Text = ((Exception)sender).Message;
         }
 
-        /*
-        * Handles the "Connect"-buttom click event
-        * @param sender - contains a reference to the control/object that raised the event.
-        * @param e - contains the event data.
-        */
-        private void btnStart_Click(object sender, EventArgs e)
+        /**
+         * @brief Handles the "Connect"-buttom click event
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the event data.
+         */
+        private void BtnStart_Click(object sender, EventArgs e)
         {
             Connect();
         }
 
-        /*
-        * Handles the "Diconnect"-buttom click event
-        * @param sender - contains a reference to the control/object that raised the event.
-        * @param e - contains the event data.
-        */
-        private void btnStop_Click(object sender, EventArgs e)
+        /**
+         * @brief Handles the "Diconnect"-buttom click event
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the event data.
+         */
+        private void BtnStop_Click(object sender, EventArgs e)
         {
             Disonnect();
         }
 
-        /*
-        * Handles the "Send"-buttom click event
-        * @param sender - contains a reference to the control/object that raised the event.
-        * @param e - contains the event data.
-        */
-        private void btnSend_Click(object sender, EventArgs e)
+        /**
+         * @brief Handles the "Send"-buttom click event
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the event data.
+         */
+        private void BtnSend_Click(object sender, EventArgs e)
         {
             _spManager.Send(tbDataTransmit.Text);
         }
 
-        /*
-        * Handles the "Clear"-buttom click event
-        * @param sender - contains a reference to the control/object that raised the event.
-        * @param e - contains the event data.
-        */
-        private void btnClear_Click(object sender, EventArgs e)
+        /**
+         * Handles the "Clear"-buttom click event
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the event data.
+         */
+        private void BtnClear_Click(object sender, EventArgs e)
         {
             tbDataReceive.Clear();
         }
 
-        /*
-         * Receive text box 'Rx Enable' check box click event method.
-         * @param sender - contains a reference to the control/object that raised the event.
-         * @param e - contains the event data.
+        /**
+         * Handles the "Clear error"-buttom click event
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the event data.
          */
-        private void rxEnableCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void BtnClearError_Click(object sender, EventArgs e)
+        {
+            error_label.Text = string.Empty;
+        }
+
+        /**
+         * @brief Receive text box 'Rx Enable' check box click event method.
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the event data.
+         */
+        private void RxEnableCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             if (rxEnableCheckBox.Checked)
                 RxTextBoxEnable();
@@ -144,12 +154,79 @@ namespace SerialPortApp
                 RxTextBoxDisable();
         }
 
+        /** !!! TODO !!!
+         * @brief New serial port data recived event handlig function. Update of analog input data plot
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the serial port event data.
+         */
+        private void SpManager_DataReveiced_UpdateDataPlot(object sender, SerialDataEventArgs e)
+        {
+            if (InvokeRequired)
+            {
+                // Using this.Invoke causes deadlock when closing serial port, and BeginInvoke is good practice anyway.
+                BeginInvoke(new EventHandler<SerialDataEventArgs>(SpManager_DataReveiced_UpdateDataPlot), new object[] { sender, e });
+                return;
+            }
+
+            // TODO: PLOT UPDATE LOGIC
+        }
+
+        /** !!! TODO !!!
+         * @brief Input plot 'Start' button click event method.
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the event data.
+         */
+        private void BtnPlotStart_Click(object sender, EventArgs e)
+        {
+            // TODO: PLOT START BUTTON LOGIC
+        }
+
+        /** !!! TODO !!!
+         * @brief Input plot 'Pause' button click event method.
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the event data.
+         */
+        private void BtnPlotPause_Click(object sender, EventArgs e)
+        {
+            // TODO: PLOT PAUSE BUTTON LOGIC
+        }
+
+        /** !!! TODO !!!
+         * @brief Input plot 'Stop' button click event method.
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the event data.
+         */
+        private void BtnPlotStop_Click(object sender, EventArgs e)
+        {
+            // TODO: PLOT STOP BUTTON LOGIC
+        }
+
+        /** !!! TODO !!!
+         * @brief Output control track bar scroll event method.
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the event data.
+         */
+        private void TrackBar_Scroll(object sender, EventArgs e)
+        {
+            // TODO: TRACK BAR SCROLL LOGIC
+        }
+
+        /** !!! TODO !!!
+         * @brief Output control 'Set' button click event method.
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the event data.
+         */
+        private void BtnDacSet_Click(object sender, EventArgs e)
+        {
+            // TODO: DAC SET BUTTON LOGIC
+        }
+
         #endregion
 
         #region Methods
 
-        /*
-         * User custom initialization.
+        /**
+         * @brief User custom initialization.
          */
         private void UserInitialization()
         {
@@ -168,8 +245,8 @@ namespace SerialPortApp
             stopBitsComboBox.DataSource = Enum.GetValues(typeof(System.IO.Ports.StopBits));
 
             // Add evnet handling functions to serial port manager
-            _spManager.NewSerialDataRecieved += new EventHandler<SerialDataEventArgs>(_spManager_NewSerialDataRecieved);
-            _spManager.ErrorHandler += new EventHandler<EventArgs>(_spManager_ErrorHandler);
+            _spManager.NewSerialDataRecieved += new EventHandler<SerialDataEventArgs>(SpManager_DataReveiced_UpdateTextblock);
+            _spManager.ErrorHandler += new EventHandler<EventArgs>(SpManager_ErrorHandler);
 
             this.FormClosing += new FormClosingEventHandler(MainForm_FormClosing);
 
@@ -194,9 +271,9 @@ namespace SerialPortApp
             }
         }
 
-        /*
-        * Disconnect procedure - close and stop listening on COM port.
-        */
+        /**
+         * @brief Disconnect procedure - close and stop listening on COM port.
+         */
         private void Disonnect()
         {
             _spManager.StopListening();
@@ -208,25 +285,25 @@ namespace SerialPortApp
             parityComboBox.Enabled = true;
             stopBitsComboBox.Enabled = true;
         }
-   
-        /*
-         * Enables receive text box.
+
+        /**
+         * @brief Enables receive text box.
          */
         private void RxTextBoxEnable()
         {
             rxEnableCheckBox.Checked = true;
             tbDataReceive.Enabled = true;
-            _spManager.NewSerialDataRecieved += new EventHandler<SerialDataEventArgs>(_spManager_NewSerialDataRecieved);
+            _spManager.NewSerialDataRecieved += new EventHandler<SerialDataEventArgs>(SpManager_DataReveiced_UpdateTextblock);
         }
 
-        /*
-         * Disables receive text box.
+        /**
+         * @brief Disables receive text box.
          */
         private void RxTextBoxDisable()
         {
             rxEnableCheckBox.Checked = false;
             tbDataReceive.Enabled = false;
-            _spManager.NewSerialDataRecieved -= new EventHandler<SerialDataEventArgs>(_spManager_NewSerialDataRecieved);
+            _spManager.NewSerialDataRecieved -= new EventHandler<SerialDataEventArgs>(SpManager_DataReveiced_UpdateTextblock);
         }
 
         #endregion
