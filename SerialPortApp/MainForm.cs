@@ -1,10 +1,11 @@
 ﻿/**
-*   @author Adrian Wojcik
-*   @file MainForm.cs
-*   @date 02.11.17
-*   @brief Main form class.
-*   Based on project by Amund Gjersøe (www.codeproject.com/Articles/75770/Basic-serial-port-listening-application)
-*/
+ *   @file MainForm.cs
+ *   @author AW    @adrian.wojcik@put.poznan.pl
+ *   @date 02-Nov-17
+ *   @brief Main form class.
+ *          Based on project by Amund Gjersøe 
+ *   @ref   www.codeproject.com/Articles/75770/Basic-serial-port-listening-application
+ */
 
 /*
  * System libraries
