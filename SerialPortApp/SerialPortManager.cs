@@ -1,16 +1,14 @@
 ﻿/**
-*   @author Adrian Wojcik
-*   @file SerialPortManager.cs
-*   @date 02.11.17
-*   @brief Serial port manager class - support for receiving and sending data.
-*   Based on project by Amund Gjersøe (www.codeproject.com/Articles/75770/Basic-serial-port-listening-application)
-*/
+ *   @file SerialPortManager.cs
+ *   @author AW    @adrian.wojcik@put.poznan.pl
+ *   @date 02-Nov-17
+ *   @brief Serial port manager class - support for receiving and sending data.
+ *          Based on project by Amund Gjersøe 
+ *   @ref   www.codeproject.com/Articles/75770/Basic-serial-port-listening-application
+ */
 
 //#define SELECT_FIRST_FOUND 
 
-/*
- * System libraries
- */
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,8 +22,8 @@ using System.IO;
 namespace SerialPortApp.Serial
 {
     /**
-    * Manager for serial port class. Inherits from IDisposable interface.
-    */
+     * @brief Manager for serial port class. Inherits from IDisposable interface.
+     */
     public class SerialPortManager : IDisposable
     {
         //! Default constructor
@@ -61,8 +59,8 @@ namespace SerialPortApp.Serial
 
         #region Properties
 
-        /*
-         * Gets or sets the current serial port settings
+        /**
+         * @brief Gets or sets the current serial port settings
          */
         public SerialSettings CurrentSerialSettings
         {
@@ -74,11 +72,11 @@ namespace SerialPortApp.Serial
 
         #region Event handlers
 
-        /*
-         * Serial port settings class property changed handling function.
-         * @param sender - contains a reference to the control/object that raised the event.
-         * @param e - contains the event data.
-         */
+        /**
+          * @brief Serial port settings class property changed handling function.
+          * @param[in] sender : contains a reference to the control/object that raised the event.
+          * @param[in] e      : contains the event data.
+          */
         private void CurrentSerialSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // if serial port is changed, a new baud query is issued
@@ -86,11 +84,11 @@ namespace SerialPortApp.Serial
                 UpdateBaudRateCollection();
         }
 
-        /*
-        * Serial port data receiving routine. 
-        * @param sender - contains a reference to the control/object that raised the event.
-        * @param e - contains the event data.
-        */
+        /**
+         * @brief Serial port data receiving routine. 
+         * @param[in] sender : contains a reference to the control/object that raised the event.
+         * @param[in] e      : contains the event data.
+         */
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             int dataLength = 0;
@@ -121,9 +119,9 @@ namespace SerialPortApp.Serial
 
         #region Methods
 
-        /*
-         * Connects to a serial port defined through the current settings.
-         * return true if success, false if cannot start listening.
+        /**
+         * @brief Connects to a serial port defined through the current settings.
+         * @return True if success, false if cannot start listening.
          */
         public bool StartListening()
         {
@@ -156,18 +154,18 @@ namespace SerialPortApp.Serial
             }
         }
 
-        /*
-        * Closes current serial port.
-        */
+        /**
+         * @brief Closes current serial port.
+         */
         public void StopListening()
         {
             _serialPort.Close();
         }
 
-        /*
-        * Retrieves the current selected device's COMMPROP structure, and extracts the dwSettableBaud property.
-        * Called each time selected serial port name is changed. 
-        */
+        /**
+         * @brief Retrieves the current selected device's COMMPROP structure, and extracts the dwSettableBaud property.
+         *        Called each time selected serial port name is changed. 
+         */
         private void UpdateBaudRateCollection()
         {
             _serialPort = new SerialPort(_currentSerialSettings.PortName);
@@ -189,22 +187,22 @@ namespace SerialPortApp.Serial
             }
         }
 
-        /*
-        * Call to release serial port with "true" input argument value.
-        */
+        /**
+         * @brief Call to release serial port with "true" input argument value.
+         */
         public void Dispose()
         {
             Dispose(true);
         }
 
-        /*
-        * Part of basic design pattern for implementing Dispose
-        * @param disposing - if equals true, the method has been called directly
-        *   or indirectly by a user's code. Managed and unmanaged resources
-        *   can be disposed. If equals false, the method has been called by the
-        *   runtime from inside the finalizer and you should not reference
-        *   other objects. Only unmanaged resources can be disposed.
-        */
+        /**
+         * @brief Part of basic design pattern for implementing Dispose
+         * @param[in] disposing : if equals true, the method has been called directly
+         *   or indirectly by a user's code. Managed and unmanaged resources
+         *   can be disposed. If equals false, the method has been called by the
+         *   runtime from inside the finalizer and you should not reference
+         *   other objects. Only unmanaged resources can be disposed.
+         */
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -224,10 +222,10 @@ namespace SerialPortApp.Serial
             }
         }
 
-        /*
-        * Send string via serial port.
-        * @param data - transmitted data. 
-        */
+        /**
+         * @brief Send string via serial port.
+         * @param[in] data : transmitted data. 
+         */
         public void Send(string data)
         {
             if (_serialPort != null)
@@ -241,8 +239,8 @@ namespace SerialPortApp.Serial
     }
 
     /**
-    * Event arguments for serial port data. Inherits from EventArgs class.
-    */
+     * @brief Event arguments for serial port data. Inherits from EventArgs class.
+     */
     public class SerialDataEventArgs : EventArgs
     {
         /*

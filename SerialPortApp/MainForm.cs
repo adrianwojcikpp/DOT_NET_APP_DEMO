@@ -34,7 +34,18 @@ namespace SerialPortApp
 
         #region Fields
 
-        SerialPortManager _spManager; /** Custom serial port manager class object. */
+        private SerialPortManager _spManager;
+        private string _adcStr;
+        private double _plotTime;
+    
+        private ushort _dacValue;
+        private readonly int _spMsgSize = 3;
+        private readonly int _plotTimeMax = 100;
+        private readonly double _plotTimeStep = 1;
+
+        private readonly CultureInfo _cultureInfo = new CultureInfo("en-US");
+
+        /** Custom serial port manager class object. */
 
         #endregion
 
@@ -169,6 +180,7 @@ namespace SerialPortApp
             }
 
             // TODO: PLOT UPDATE LOGIC
+
         }
 
         /** !!! TODO !!!
@@ -179,6 +191,7 @@ namespace SerialPortApp
         private void BtnPlotStart_Click(object sender, EventArgs e)
         {
             // TODO: PLOT START BUTTON LOGIC
+
         }
 
         /** !!! TODO !!!
@@ -189,6 +202,7 @@ namespace SerialPortApp
         private void BtnPlotPause_Click(object sender, EventArgs e)
         {
             // TODO: PLOT PAUSE BUTTON LOGIC
+
         }
 
         /** !!! TODO !!!
@@ -199,6 +213,7 @@ namespace SerialPortApp
         private void BtnPlotStop_Click(object sender, EventArgs e)
         {
             // TODO: PLOT STOP BUTTON LOGIC
+
         }
 
         /** !!! TODO !!!
@@ -209,6 +224,7 @@ namespace SerialPortApp
         private void TrackBar_Scroll(object sender, EventArgs e)
         {
             // TODO: TRACK BAR SCROLL LOGIC
+
         }
 
         /** !!! TODO !!!
@@ -219,6 +235,7 @@ namespace SerialPortApp
         private void BtnDacSet_Click(object sender, EventArgs e)
         {
             // TODO: DAC SET BUTTON LOGIC
+
         }
 
         #endregion
@@ -240,6 +257,8 @@ namespace SerialPortApp
             serialSettingsBindingSource.DataSource = mySerialSettings;
             portNameComboBox.DataSource = mySerialSettings.PortNameCollection;
             baudRateComboBox.DataSource = mySerialSettings.BaudRateCollection;
+            mySerialSettings.BaudRateCollectionUpdateHandler = 
+                () => baudRateComboBox.SelectedIndex = mySerialSettings.BaudRateCollection.IndexOf(115200);    
             dataBitsComboBox.DataSource = mySerialSettings.DataBitsCollection;
             parityComboBox.DataSource = Enum.GetValues(typeof(System.IO.Ports.Parity));
             stopBitsComboBox.DataSource = Enum.GetValues(typeof(System.IO.Ports.StopBits));
@@ -304,6 +323,26 @@ namespace SerialPortApp
             rxEnableCheckBox.Checked = false;
             tbDataReceive.Enabled = false;
             _spManager.NewSerialDataRecieved -= new EventHandler<SerialDataEventArgs>(SpManager_DataReveiced_UpdateTextblock);
+        }
+
+        /**
+         * @brief 12-bit register value to voltage in volts.
+         * @param[in] reg : Register value: 12-bit unsiged integer [0x000-0xFFF].
+         * @return Voltage in volts [0.0-3.3 V].
+         */
+        private double Reg2vol(ushort reg)
+        {
+            return (3.3 * reg / 4095.0);
+        }
+
+        /**
+         * @brief Voltage in volts to 12-bit register.
+         * @param[in] vol : Voltage in volts [0.0-3.3 V]. 
+         * @return Register value: 12-bit unsiged integer [0x000-0xFFF].
+         */
+        private ushort Vol2reg(double vol)
+        {
+            return (ushort)(4095 * (vol / 3.3));
         }
 
         #endregion

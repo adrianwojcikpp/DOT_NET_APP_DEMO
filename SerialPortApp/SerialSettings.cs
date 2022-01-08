@@ -1,14 +1,12 @@
 ﻿/**
-*   @author Adrian Wojcik
-*   @file SerialSettings.cs
-*   @date 02.11.17
-*   @brief Serial port settings class. 
-*   Based on project by Amund Gjersøe (www.codeproject.com/Articles/75770/Basic-serial-port-listening-application)
-*/
-
-/*
- * System libraries
+ *   @file SerialSettings.cs
+ *   @author AW    @adrian.wojcik@put.poznan.pl
+ *   @date 02-Nov-17
+ *   @brief Serial port settings class. 
+ *          Based on project by Amund Gjersøe 
+ *   @ref   www.codeproject.com/Articles/75770/Basic-serial-port-listening-application
  */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,15 +16,15 @@ using System.ComponentModel;
 
 namespace SerialPortApp.Serial
 {
-    /*
-     * Class containing properties related to a serial port 
+    /**
+     * @brief Class containing properties related to a serial port 
      */
     public class SerialSettings : INotifyPropertyChanged
     {
         #region Fields
 
         string _portName = "";              /**< Serial port name. */
-        int _baudRate = 4800;               /**< Serial port badu rate. */
+        int _baudRate = 115200;             /**< Serial port badu rate. */
         Parity _parity = Parity.None;       /**< Serial port parity. */
         int _dataBits = 8;                  /**< Serial port data bits number. */
         StopBits _stopBits = StopBits.One;  /**< Serial port stop bits number. */
@@ -35,15 +33,17 @@ namespace SerialPortApp.Serial
         readonly int[] _dataBitsCollection = new int[] { 5, 6, 7, 8 };           /**< Serial port data bits collection. */
         readonly BindingList<int> _baudRateCollection = new BindingList<int>();  /**< Serial port setable baud rate collection */
 
+        public delegate void BaudRateCollectionUpdateHandlerType();
+        public BaudRateCollectionUpdateHandlerType BaudRateCollectionUpdateHandler;
         public event PropertyChangedEventHandler PropertyChanged;       /**< Property changed handling evnet. */
 
         #endregion
 
         #region Properties
 
-        /*
-        * The port to use (for example, COM1).
-        */
+        /**
+         * @brief The port to use (for example, COM1).
+         */
         public string PortName
         {
             get { return _portName; }
@@ -57,9 +57,9 @@ namespace SerialPortApp.Serial
             }
         }
 
-        /*
-        * The baud rate.
-        */
+        /**
+         * @brief The baud rate.
+         */
         public int BaudRate
         {
             get { return _baudRate; }
@@ -73,9 +73,9 @@ namespace SerialPortApp.Serial
             }
         }
 
-        /*
-        * One of the Parity values.
-        */
+        /**
+         * @brief One of the Parity values.
+         */
         public Parity Parity
         {
             get { return _parity; }
@@ -88,10 +88,10 @@ namespace SerialPortApp.Serial
                 }
             }
         }
-       
-        /*
-        * The data bits value.
-        */
+
+        /**
+         * @brief  The data bits value.
+         */
         public int DataBits
         {
             get { return _dataBits; }
@@ -105,9 +105,9 @@ namespace SerialPortApp.Serial
             }
         }
 
-        /*
-        * One of the StopBits values.
-        */
+        /**
+         * @brief One of the StopBits values.
+         */
         public StopBits StopBits
         {
             get { return _stopBits; }
@@ -121,26 +121,26 @@ namespace SerialPortApp.Serial
             }
         }
 
-        /*
-        * Available ports on the computer
-        */
+        /**
+         * @brief Available ports on the computer
+         */
         public string[] PortNameCollection
         {
             get { return _portNameCollection; }
             set { _portNameCollection = value; }
         }
 
-        /*
-        * Available baud rates for current serial port
-        */
+        /**
+         * @brief Available baud rates for current serial port
+         */
         public BindingList<int> BaudRateCollection
         {
             get { return _baudRateCollection; }
         }
 
-        /*
-        * Available databits setting
-        */
+        /**
+         * @brief Available databits setting
+         */
         public int[] DataBitsCollection
         {
             get { return _dataBitsCollection; } 
@@ -150,10 +150,10 @@ namespace SerialPortApp.Serial
 
         #region Methods
 
-        /*
-        * Updates the range of possible baud rates for device
-        * @param possibleBaudRates - dwSettableBaud parameter from the COMMPROP Structure
-        */
+        /**
+         * @brief Updates the range of possible baud rates for device
+         * @param[in] possibleBaudRates : dwSettableBaud parameter from the COMMPROP Structure
+         */
         public void UpdateBaudRateCollection(int possibleBaudRates)
         {
             const int BAUD_075 = 0x00000001;
@@ -215,12 +215,13 @@ namespace SerialPortApp.Serial
                 _baudRateCollection.Add(128000);
 
             SendPropertyChangedEvent("BaudRateCollection");
+            BaudRateCollectionUpdateHandler();
         }
 
-        /*
-        * Send a PropertyChanged event.
-        * @param propertyName - name of changed property
-        */
+        /**
+         * @brief Send a PropertyChanged event.
+         * @param[in] propertyName : name of changed property
+         */
         private void SendPropertyChangedEvent(String propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
